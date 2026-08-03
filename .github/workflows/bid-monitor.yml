@@ -1,0 +1,55 @@
+name: OCN Bid Monitor
+
+on:
+  schedule:
+    # UTC 0:30 = 北京时间 8:30 每日运行
+    - cron: '30 0 * * *'
+  workflow_dispatch:  # 允许手动触发
+    inputs:
+      days:
+        description: '抓取最近几天（1-10）'
+        required: false
+        default: '2'
+
+permissions:
+  contents: write
+  pages: write
+  id-token: write
+
+jobs:
+  scrape:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+
+      - name: Setup Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: '3.11'
+
+      - name: Install dependencies
+        run: pip install -r requirements.txt
+
+      - name: Run bid monitor
+        run: |
+          DAYS=${{ github.event.inputs.days || '2' }}
+          echo "抓取最近 ${DAYS} 天的招投标信息..."
+          python bid_monitor.py --days ${DAYS}
+          
+          # Move generated HTML report to docs/ for GitHub Pages
+          mkdir -p docs
+          cp bid_report_*.html docs/index.html
+          
+          # Show report info
+          echo "报告文件:"
+          ls -la docs/
+          echo "报告大小: $(wc -c < docs/index.html) bytes"
+
+      - name: Deploy to GitHub Pages
+        uses: peaceiris/actions-gh-pages@v3
+        with:
+          github_token: ${{ secrets.GITHUB_TOKEN }}
+          publish_dir: ./docs
+          publish_branch: gh-pages
+          force_orphan: true

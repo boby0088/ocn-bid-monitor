@@ -1,0 +1,21 @@
+# Python
+__pycache__/
+*.pyc
+bid_report_*.html
+
+# IDE
+.vscode/
+.idea/
+
+# OS
+.DS_Store
+Thumbs.db
+
+# WorkBuddy
+.workbuddy/
+
+# Cloudflare Worker (not needed for GitHub)
+cf-worker/
+
+# Old files
+东方有线_*.html
