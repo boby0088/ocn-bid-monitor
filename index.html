@@ -1,0 +1,1273 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>东方有线投标机会监控报告 - 2026-09-15</title>
+    <style>
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        body {
+            font-family: -apple-system, "Microsoft YaHei", "Segoe UI", sans-serif;
+            background: #f0f2f5; color: #333; line-height: 1.6;
+        }
+        .header {
+            background: linear-gradient(135deg, #1a237e 0%, #283593 50%, #3949ab 100%);
+            color: white; padding: 30px 40px; box-shadow: 0 2px 8px rgba(0,0,0,0.15);
+        }
+        .header h1 { font-size: 24px; margin-bottom: 8px; }
+        .header .subtitle { font-size: 14px; opacity: 0.85; }
+        .header .meta-bar { display: flex; gap: 30px; margin-top: 15px; font-size: 13px; opacity: 0.9; flex-wrap: wrap; }
+        .container { max-width: 1200px; margin: 0 auto; padding: 20px; }
+        .stats-bar { display: flex; gap: 20px; margin-bottom: 25px; flex-wrap: wrap; }
+        .stat-card {
+            flex: 1; min-width: 140px; background: white; border-radius: 8px; padding: 20px;
+            text-align: center; box-shadow: 0 1px 4px rgba(0,0,0,0.08);
+        }
+        .stat-card .num { font-size: 32px; font-weight: bold; color: #1a237e; }
+        .stat-card .label { font-size: 13px; color: #666; margin-top: 5px; }
+        .stat-card.high .num { color: #e74c3c; }
+        .stat-card.mid .num { color: #e67e22; }
+        .stat-card.source .num { color: #1565c0; }
+        .section-title {
+            font-size: 18px; font-weight: bold; color: #1a237e;
+            margin: 25px 0 15px; padding-left: 12px; border-left: 4px solid #1a237e;
+        }
+        .bid-card {
+            background: white; border-radius: 8px; padding: 20px;
+            margin-bottom: 15px; box-shadow: 0 1px 4px rgba(0,0,0,0.08);
+            transition: box-shadow 0.2s;
+        }
+        .bid-card:hover { box-shadow: 0 2px 12px rgba(0,0,0,0.12); }
+        .bid-header { display: flex; align-items: center; gap: 8px; margin-bottom: 10px; flex-wrap: wrap; }
+        .bid-num {
+            background: #e8eaf6; color: #1a237e; font-weight: bold;
+            padding: 2px 10px; border-radius: 4px; font-size: 13px;
+        }
+        .bid-source {
+            color: white; padding: 2px 10px; border-radius: 4px; font-size: 11px;
+        }
+        .bid-type {
+            background: #e3f2fd; color: #1565c0;
+            padding: 2px 10px; border-radius: 4px; font-size: 12px;
+        }
+        .match-badge {
+            color: white; padding: 2px 12px; border-radius: 12px;
+            font-size: 12px; font-weight: bold; margin-left: auto;
+        }
+        .bid-title { font-size: 16px; margin: 8px 0 12px; line-height: 1.4; }
+        .bid-title a { color: #1a237e; text-decoration: none; }
+        .bid-title a:hover { text-decoration: underline; }
+        .bid-meta { display: grid; grid-template-columns: 1fr 1fr; gap: 8px 20px; }
+        .meta-row { display: flex; font-size: 13px; }
+        .meta-label { color: #888; min-width: 65px; margin-right: 8px; }
+        .meta-value { color: #333; }
+        .meta-value.budget { color: #e74c3c; font-weight: bold; }
+        .bid-detail {
+            margin-top: 10px; padding: 10px; background: #f5f5f5;
+            border-radius: 4px; font-size: 13px; color: #555;
+            max-height: 100px; overflow: hidden; position: relative;
+        }
+        .bid-detail::after {
+            content: '...'; position: absolute; bottom: 0; right: 0;
+            background: #f5f5f5; padding: 0 5px;
+        }
+        .bid-keywords { margin-top: 10px; display: flex; flex-wrap: wrap; align-items: center; gap: 5px; }
+        .kw-label { font-size: 12px; color: #888; }
+        .kw-tag {
+            background: #e8f5e9; color: #2e7d32;
+            padding: 1px 8px; border-radius: 10px; font-size: 11px;
+        }
+        .kw-none { font-size: 12px; color: #ccc; }
+        .bid-actions { margin-top: 12px; }
+        .btn-view {
+            display: inline-block; padding: 5px 20px;
+            background: #1a237e; color: white; text-decoration: none;
+            border-radius: 4px; font-size: 13px;
+        }
+        .btn-view:hover { background: #283593; }
+        .no-result { text-align: center; padding: 60px; color: #999; font-size: 16px; }
+        /* [v2.0] 临港新片区醒目样式 */
+        .lingang-banner {
+            background: linear-gradient(135deg, #b71c1c 0%, #c62828 50%, #d84315 100%);
+            color: white; padding: 15px 20px; border-radius: 8px;
+            margin-bottom: 15px; display: flex; align-items: center; gap: 12px;
+            box-shadow: 0 2px 10px rgba(183,28,28,0.3); font-size: 16px;
+        }
+        .lingang-banner .lingang-icon { font-size: 22px; }
+        .lingang-banner .lingang-title-text { font-weight: bold; font-size: 18px; }
+        .lingang-banner .lingang-count {
+            margin-left: auto; background: rgba(255,255,255,0.25);
+            padding: 2px 12px; border-radius: 12px; font-size: 13px;
+        }
+        .bid-card.lingang {
+            border-left: 5px solid #c62828;
+            background: linear-gradient(to right, #fff8e1 0%, #ffffff 40%);
+            box-shadow: 0 2px 8px rgba(198,40,40,0.12);
+        }
+        .bid-card.lingang:hover {
+            box-shadow: 0 4px 16px rgba(198,40,40,0.2);
+            border-left-color: #b71c1c;
+        }
+        .lingang-badge {
+            background: #c62828; color: white; padding: 2px 12px;
+            border-radius: 12px; font-size: 11px; font-weight: bold;
+            white-space: nowrap;
+        }
+        .lingang-reason {
+            margin-top: 8px; padding: 6px 10px; background: #fff3e0;
+            border-radius: 4px; font-size: 12px; color: #e65100;
+            border: 1px dashed #ffb74d;
+        }
+        .lingang-label { font-weight: bold; }
+        .lingang-keywords { color: #bf360c; }
+        .stat-card.lingang .num { color: #c62828; }
+        .footer { text-align: center; padding: 20px; color: #999; font-size: 12px; }
+    </style>
+</head>
+<body>
+    <div class="header">
+        <h1>东方有线网络有限公司 - 投标机会监控报告 v2.0</h1>
+        <div class="subtitle">中国广电网络股份有限公司上海分公司 | 广电+通信融合运营商 | 第四大基础电信运营商</div>
+        <div class="meta-bar">
+            <span>报告日期: 2026-09-15 05:05:59</span>
+            <span>抓取范围: 最近 2 天</span>
+            <span>数据来源: 中国政府采购网 + 上海政府采购网</span>
+            <span>★ 临港新片区项目: 9 个</span>
+        </div>
+    </div>
+    <div class="container">
+        <div class="stats-bar">
+            <div class="stat-card">
+                <div class="num">28</div>
+                <div class="label">匹配项目总数</div>
+            </div>
+            <div class="stat-card high">
+                <div class="num">1</div>
+                <div class="label">极高匹配度</div>
+            </div>
+            <div class="stat-card mid">
+                <div class="num">0</div>
+                <div class="label">高匹配度</div>
+            </div>
+            <div class="stat-card">
+                <div class="num">27</div>
+                <div class="label">中等匹配度</div>
+            </div>
+            <div class="stat-card source">
+                <div class="num">21</div>
+                <div class="label">上海政府采购网</div>
+            </div>
+            <div class="stat-card source">
+                <div class="num">7</div>
+                <div class="label">中国政府采购网</div>
+            </div>
+            <div class="stat-card lingang">
+                <div class="num">9</div>
+                <div class="label">★ 临港新片区项目</div>
+            </div>
+        </div>
+        
+        <div class="lingang-banner">
+            <span class="lingang-icon">★</span>
+            <span class="lingang-title-text">临港新片区重点项目</span>
+            <span class="lingang-count">9 个项目</span>
+        </div>
+        <div class="bid-card lingang">
+            <div class="bid-header">
+                <span class="bid-num">#1</span>
+                <span class="bid-source" style="background:#1565c0">上海政府采购网</span>
+                <span class="bid-type">公开招标公告</span>
+                <span class="lingang-badge">★ 临港新片区</span>
+                <span class="match-badge" style="background:#f39c12">中</span>
+            </div>
+            <h3 class="bid-title">
+                <a href="https://www.zfcg.sh.gov.cn/site/detail?parentId=137027&amp;articleId=L2wkRcYpjvZkI1xxc7QOHg==" target="_blank">浦东新区精神卫生中心（书院院区）新建工程开办信息化项目的公开招标公告</a>
+            </h3>
+            <div class="bid-meta">
+                <div class="meta-row">
+                    <span class="meta-label">采购人</span>
+                    <span class="meta-value">上海市浦东新区南汇精神卫生中心</span>
+                </div>
+                <div class="meta-row">
+                    <span class="meta-label">预算金额</span>
+                    <span class="meta-value budget">1288.47万元</span>
+                </div>
+                <div class="meta-row">
+                    <span class="meta-label">发布日期</span>
+                    <span class="meta-value">2026-09-13 16:00</span>
+                </div>
+                <div class="meta-row">
+                    <span class="meta-label">地区</span>
+                    <span class="meta-value">浦东新区</span>
+                </div>
+            </div>
+            <div class="bid-detail">采购方式: 公开招标</div>
+            <div class="lingang-reason"><span class="lingang-label">临港命中:</span> <span class="lingang-keywords">南汇, 书院</span></div>
+            <div class="bid-keywords">
+                <span class="kw-label">命中关键词(1):</span>
+                <span class="kw-tag">信息化</span>
+            </div>
+            <div class="bid-actions">
+                <a href="https://www.zfcg.sh.gov.cn/site/detail?parentId=137027&amp;articleId=L2wkRcYpjvZkI1xxc7QOHg==" target="_blank" class="btn-view">查看公告原文</a>
+            </div>
+        </div>
+        <div class="bid-card lingang">
+            <div class="bid-header">
+                <span class="bid-num">#2</span>
+                <span class="bid-source" style="background:#1565c0">上海政府采购网</span>
+                <span class="bid-type">公开招标公告</span>
+                <span class="lingang-badge">★ 临港新片区</span>
+                <span class="match-badge" style="background:#f39c12">中</span>
+            </div>
+            <h3 class="bid-title">
+                <a href="https://www.zfcg.sh.gov.cn/site/detail?parentId=137027&amp;articleId=U5tw9SCSITEZd1ogh17rvg==" target="_blank">2026年环境综合管理第三方辅助服务项目的公开招标公告</a>
+            </h3>
+            <div class="bid-meta">
+                <div class="meta-row">
+                    <span class="meta-label">采购人</span>
+                    <span class="meta-value">中国（上海）自由贸易试验区临港新片区管理委员会</span>
+                </div>
+                <div class="meta-row">
+                    <span class="meta-label">预算金额</span>
+                    <span class="meta-value budget">2686.00万元</span>
+                </div>
+                <div class="meta-row">
+                    <span class="meta-label">发布日期</span>
+                    <span class="meta-value">2026-09-14 09:11</span>
+                </div>
+                <div class="meta-row">
+                    <span class="meta-label">地区</span>
+                    <span class="meta-value">上海市本级</span>
+                </div>
+            </div>
+            <div class="bid-detail">采购方式: 公开招标</div>
+            <div class="lingang-reason"><span class="lingang-label">临港命中:</span> <span class="lingang-keywords">临港, 临港新片区, 新片区</span></div>
+            <div class="bid-keywords">
+                <span class="kw-label">命中关键词(0):</span>
+                <span class="kw-none">无</span>
+            </div>
+            <div class="bid-actions">
+                <a href="https://www.zfcg.sh.gov.cn/site/detail?parentId=137027&amp;articleId=U5tw9SCSITEZd1ogh17rvg==" target="_blank" class="btn-view">查看公告原文</a>
+            </div>
+        </div>
+        <div class="bid-card lingang">
+            <div class="bid-header">
+                <span class="bid-num">#3</span>
+                <span class="bid-source" style="background:#1565c0">上海政府采购网</span>
+                <span class="bid-type">公开招标公告</span>
+                <span class="lingang-badge">★ 临港新片区</span>
+                <span class="match-badge" style="background:#f39c12">中</span>
+            </div>
+            <h3 class="bid-title">
+                <a href="https://www.zfcg.sh.gov.cn/site/detail?parentId=137027&amp;articleId=2G3rtp6JsvaiVMFduxj0Ug==" target="_blank">上海市浦东医院临港院区物业管理、保安服务项目的公开招标公告</a>
+            </h3>
+            <div class="bid-meta">
+                <div class="meta-row">
+                    <span class="meta-label">采购人</span>
+                    <span class="meta-value">上海市浦东医院</span>
+                </div>
+                <div class="meta-row">
+                    <span class="meta-label">预算金额</span>
+                    <span class="meta-value budget">441.38万元</span>
+                </div>
+                <div class="meta-row">
+                    <span class="meta-label">发布日期</span>
+                    <span class="meta-value">2026-09-14 09:00</span>
+                </div>
+                <div class="meta-row">
+                    <span class="meta-label">地区</span>
+                    <span class="meta-value">浦东新区</span>
+                </div>
+            </div>
+            <div class="bid-detail">采购方式: 公开招标</div>
+            <div class="lingang-reason"><span class="lingang-label">临港命中:</span> <span class="lingang-keywords">临港</span></div>
+            <div class="bid-keywords">
+                <span class="kw-label">命中关键词(0):</span>
+                <span class="kw-none">无</span>
+            </div>
+            <div class="bid-actions">
+                <a href="https://www.zfcg.sh.gov.cn/site/detail?parentId=137027&amp;articleId=2G3rtp6JsvaiVMFduxj0Ug==" target="_blank" class="btn-view">查看公告原文</a>
+            </div>
+        </div>
+        <div class="bid-card lingang">
+            <div class="bid-header">
+                <span class="bid-num">#4</span>
+                <span class="bid-source" style="background:#1565c0">上海政府采购网</span>
+                <span class="bid-type">公开招标公告</span>
+                <span class="lingang-badge">★ 临港新片区</span>
+                <span class="match-badge" style="background:#f39c12">中</span>
+            </div>
+            <h3 class="bid-title">
+                <a href="https://www.zfcg.sh.gov.cn/site/detail?parentId=137027&amp;articleId=KNljZvka77me6WzeiCXrvA==" target="_blank">医用床类的公开招标公告</a>
+            </h3>
+            <div class="bid-meta">
+                <div class="meta-row">
+                    <span class="meta-label">采购人</span>
+                    <span class="meta-value">上海市浦东新区南汇精神卫生中心</span>
+                </div>
+                <div class="meta-row">
+                    <span class="meta-label">预算金额</span>
+                    <span class="meta-value budget">452.00万元</span>
+                </div>
+                <div class="meta-row">
+                    <span class="meta-label">发布日期</span>
+                    <span class="meta-value">2026-09-14 08:08</span>
+                </div>
+                <div class="meta-row">
+                    <span class="meta-label">地区</span>
+                    <span class="meta-value">浦东新区</span>
+                </div>
+            </div>
+            <div class="bid-detail">采购方式: 公开招标</div>
+            <div class="lingang-reason"><span class="lingang-label">临港命中:</span> <span class="lingang-keywords">南汇</span></div>
+            <div class="bid-keywords">
+                <span class="kw-label">命中关键词(0):</span>
+                <span class="kw-none">无</span>
+            </div>
+            <div class="bid-actions">
+                <a href="https://www.zfcg.sh.gov.cn/site/detail?parentId=137027&amp;articleId=KNljZvka77me6WzeiCXrvA==" target="_blank" class="btn-view">查看公告原文</a>
+            </div>
+        </div>
+        <div class="bid-card lingang">
+            <div class="bid-header">
+                <span class="bid-num">#5</span>
+                <span class="bid-source" style="background:#1565c0">上海政府采购网</span>
+                <span class="bid-type">竞争性磋商公告</span>
+                <span class="lingang-badge">★ 临港新片区</span>
+                <span class="match-badge" style="background:#f39c12">中</span>
+            </div>
+            <h3 class="bid-title">
+                <a href="https://www.zfcg.sh.gov.cn/site/detail?parentId=137027&amp;articleId=zYkOMmw9LsjE86xD5DumIQ==" target="_blank">中泐村和美乡村建设道路提升项目的竞争性磋商公告</a>
+            </h3>
+            <div class="bid-meta">
+                <div class="meta-row">
+                    <span class="meta-label">采购人</span>
+                    <span class="meta-value">上海市浦东新区泥城镇人民政府</span>
+                </div>
+                <div class="meta-row">
+                    <span class="meta-label">预算金额</span>
+                    <span class="meta-value budget">190.00万元</span>
+                </div>
+                <div class="meta-row">
+                    <span class="meta-label">发布日期</span>
+                    <span class="meta-value">2026-09-15 01:20</span>
+                </div>
+                <div class="meta-row">
+                    <span class="meta-label">地区</span>
+                    <span class="meta-value">浦东新区</span>
+                </div>
+            </div>
+            <div class="bid-detail">采购方式: 竞争性磋商</div>
+            <div class="lingang-reason"><span class="lingang-label">临港命中:</span> <span class="lingang-keywords">泥城</span></div>
+            <div class="bid-keywords">
+                <span class="kw-label">命中关键词(0):</span>
+                <span class="kw-none">无</span>
+            </div>
+            <div class="bid-actions">
+                <a href="https://www.zfcg.sh.gov.cn/site/detail?parentId=137027&amp;articleId=zYkOMmw9LsjE86xD5DumIQ==" target="_blank" class="btn-view">查看公告原文</a>
+            </div>
+        </div>
+        <div class="bid-card lingang">
+            <div class="bid-header">
+                <span class="bid-num">#6</span>
+                <span class="bid-source" style="background:#1565c0">上海政府采购网</span>
+                <span class="bid-type">竞争性磋商公告</span>
+                <span class="lingang-badge">★ 临港新片区</span>
+                <span class="match-badge" style="background:#f39c12">中</span>
+            </div>
+            <h3 class="bid-title">
+                <a href="https://www.zfcg.sh.gov.cn/site/detail?parentId=137027&amp;articleId=Sg+BdnGzKM02dYbh5DjOdg==" target="_blank">新泐村和美乡村建设道路提升项目的竞争性磋商公告</a>
+            </h3>
+            <div class="bid-meta">
+                <div class="meta-row">
+                    <span class="meta-label">采购人</span>
+                    <span class="meta-value">上海市浦东新区泥城镇人民政府</span>
+                </div>
+                <div class="meta-row">
+                    <span class="meta-label">预算金额</span>
+                    <span class="meta-value budget">380.00万元</span>
+                </div>
+                <div class="meta-row">
+                    <span class="meta-label">发布日期</span>
+                    <span class="meta-value">2026-09-14 08:45</span>
+                </div>
+                <div class="meta-row">
+                    <span class="meta-label">地区</span>
+                    <span class="meta-value">浦东新区</span>
+                </div>
+            </div>
+            <div class="bid-detail">采购方式: 竞争性磋商</div>
+            <div class="lingang-reason"><span class="lingang-label">临港命中:</span> <span class="lingang-keywords">泥城</span></div>
+            <div class="bid-keywords">
+                <span class="kw-label">命中关键词(0):</span>
+                <span class="kw-none">无</span>
+            </div>
+            <div class="bid-actions">
+                <a href="https://www.zfcg.sh.gov.cn/site/detail?parentId=137027&amp;articleId=Sg+BdnGzKM02dYbh5DjOdg==" target="_blank" class="btn-view">查看公告原文</a>
+            </div>
+        </div>
+        <div class="bid-card lingang">
+            <div class="bid-header">
+                <span class="bid-num">#7</span>
+                <span class="bid-source" style="background:#1565c0">上海政府采购网</span>
+                <span class="bid-type">竞争性磋商公告</span>
+                <span class="lingang-badge">★ 临港新片区</span>
+                <span class="match-badge" style="background:#f39c12">中</span>
+            </div>
+            <h3 class="bid-title">
+                <a href="https://www.zfcg.sh.gov.cn/site/detail?parentId=137027&amp;articleId=H5DdTcs0SOjR1Ffyod8lfw==" target="_blank">2026年&quot;五违四必”专项整治工程的竞争性磋商公告</a>
+            </h3>
+            <div class="bid-meta">
+                <div class="meta-row">
+                    <span class="meta-label">采购人</span>
+                    <span class="meta-value">上海市浦东新区南汇新城镇人民政府</span>
+                </div>
+                <div class="meta-row">
+                    <span class="meta-label">预算金额</span>
+                    <span class="meta-value budget">200.00万元</span>
+                </div>
+                <div class="meta-row">
+                    <span class="meta-label">发布日期</span>
+                    <span class="meta-value">2026-09-14 06:13</span>
+                </div>
+                <div class="meta-row">
+                    <span class="meta-label">地区</span>
+                    <span class="meta-value">浦东新区</span>
+                </div>
+            </div>
+            <div class="bid-detail">采购方式: 竞争性磋商</div>
+            <div class="lingang-reason"><span class="lingang-label">临港命中:</span> <span class="lingang-keywords">南汇, 南汇新城</span></div>
+            <div class="bid-keywords">
+                <span class="kw-label">命中关键词(0):</span>
+                <span class="kw-none">无</span>
+            </div>
+            <div class="bid-actions">
+                <a href="https://www.zfcg.sh.gov.cn/site/detail?parentId=137027&amp;articleId=H5DdTcs0SOjR1Ffyod8lfw==" target="_blank" class="btn-view">查看公告原文</a>
+            </div>
+        </div>
+        <div class="bid-card lingang">
+            <div class="bid-header">
+                <span class="bid-num">#8</span>
+                <span class="bid-source" style="background:#1565c0">上海政府采购网</span>
+                <span class="bid-type">采购意向公开</span>
+                <span class="lingang-badge">★ 临港新片区</span>
+                <span class="match-badge" style="background:#f39c12">中</span>
+            </div>
+            <h3 class="bid-title">
+                <a href="https://www.zfcg.sh.gov.cn/site/detail?parentId=137027&amp;articleId=sxjSJQWdqVkDaz4NdZwrQQ==" target="_blank">上海市奉贤区金汇镇综合行政执法队2026年09月政府采购意向</a>
+            </h3>
+            <div class="bid-meta">
+                <div class="meta-row">
+                    <span class="meta-label">采购人</span>
+                    <span class="meta-value">上海市奉贤区金汇镇综合行政执法队</span>
+                </div>
+                <div class="meta-row">
+                    <span class="meta-label">预算金额</span>
+                    <span class="meta-value budget">详见公告</span>
+                </div>
+                <div class="meta-row">
+                    <span class="meta-label">发布日期</span>
+                    <span class="meta-value">2026-09-14 07:19</span>
+                </div>
+                <div class="meta-row">
+                    <span class="meta-label">地区</span>
+                    <span class="meta-value">奉贤区</span>
+                </div>
+            </div>
+            
+            <div class="lingang-reason"><span class="lingang-label">临港命中:</span> <span class="lingang-keywords">金汇</span></div>
+            <div class="bid-keywords">
+                <span class="kw-label">命中关键词(0):</span>
+                <span class="kw-none">无</span>
+            </div>
+            <div class="bid-actions">
+                <a href="https://www.zfcg.sh.gov.cn/site/detail?parentId=137027&amp;articleId=sxjSJQWdqVkDaz4NdZwrQQ==" target="_blank" class="btn-view">查看公告原文</a>
+            </div>
+        </div>
+        <div class="bid-card lingang">
+            <div class="bid-header">
+                <span class="bid-num">#9</span>
+                <span class="bid-source" style="background:#1565c0">上海政府采购网</span>
+                <span class="bid-type">采购意向公开</span>
+                <span class="lingang-badge">★ 临港新片区</span>
+                <span class="match-badge" style="background:#f39c12">中</span>
+            </div>
+            <h3 class="bid-title">
+                <a href="https://www.zfcg.sh.gov.cn/site/detail?parentId=137027&amp;articleId=WmoyG4C5x9oh0rhY7cM24A==" target="_blank">上海市奉贤区青村镇城市建设管理事务中心2026年10月政府采购意向</a>
+            </h3>
+            <div class="bid-meta">
+                <div class="meta-row">
+                    <span class="meta-label">采购人</span>
+                    <span class="meta-value">上海市奉贤区青村镇城市建设管理事务中心</span>
+                </div>
+                <div class="meta-row">
+                    <span class="meta-label">预算金额</span>
+                    <span class="meta-value budget">详见公告</span>
+                </div>
+                <div class="meta-row">
+                    <span class="meta-label">发布日期</span>
+                    <span class="meta-value">2026-09-14 06:48</span>
+                </div>
+                <div class="meta-row">
+                    <span class="meta-label">地区</span>
+                    <span class="meta-value">奉贤区</span>
+                </div>
+            </div>
+            
+            <div class="lingang-reason"><span class="lingang-label">临港命中:</span> <span class="lingang-keywords">青村</span></div>
+            <div class="bid-keywords">
+                <span class="kw-label">命中关键词(0):</span>
+                <span class="kw-none">无</span>
+            </div>
+            <div class="bid-actions">
+                <a href="https://www.zfcg.sh.gov.cn/site/detail?parentId=137027&amp;articleId=WmoyG4C5x9oh0rhY7cM24A==" target="_blank" class="btn-view">查看公告原文</a>
+            </div>
+        </div><div class="section-title">其他匹配项目</div>
+        <div class="bid-card">
+            <div class="bid-header">
+                <span class="bid-num">#10</span>
+                <span class="bid-source" style="background:#00897b">中国政府采购网</span>
+                <span class="bid-type">中央公开招标</span>
+                
+                <span class="match-badge" style="background:#e74c3c">极高</span>
+            </div>
+            <h3 class="bid-title">
+                <a href="https://www.ccgp.gov.cn/cggg/zygg/gkzb/202609/t20260914_27318971.htm" target="_blank">某单位信息化建设项目服务器、基础软件及其他设备采购项目招标公告</a>
+            </h3>
+            <div class="bid-meta">
+                <div class="meta-row">
+                    <span class="meta-label">采购人</span>
+                    <span class="meta-value">某单位1</span>
+                </div>
+                <div class="meta-row">
+                    <span class="meta-label">预算金额</span>
+                    <span class="meta-value budget">441.61万元</span>
+                </div>
+                <div class="meta-row">
+                    <span class="meta-label">发布日期</span>
+                    <span class="meta-value">2026-09-14 09:25</span>
+                </div>
+                <div class="meta-row">
+                    <span class="meta-label">地区</span>
+                    <span class="meta-value">上海</span>
+                </div>
+            </div>
+            <div class="bid-detail">五类以太交换机,服务器操作系统,二类高性能服务器,一类备份服务器,五类管理终端,负载均衡,三类存储设备,二类三层交换机,二类数据库集群服务器,二类计算服务器,三类数据服务器,二类存储服务器,三类汇聚交换机,五类计算服务器,应用服务器,三类大数据存储设备,工控协议模糊测试工具,五类存储服务器 6．</div>
+            
+            <div class="bid-keywords">
+                <span class="kw-label">命中关键词(5):</span>
+                <span class="kw-tag">集群</span> <span class="kw-tag">大数据</span> <span class="kw-tag">操作系统</span> <span class="kw-tag">信息化</span> <span class="kw-tag">备份</span>
+            </div>
+            <div class="bid-actions">
+                <a href="https://www.ccgp.gov.cn/cggg/zygg/gkzb/202609/t20260914_27318971.htm" target="_blank" class="btn-view">查看公告原文</a>
+            </div>
+        </div>
+        <div class="bid-card">
+            <div class="bid-header">
+                <span class="bid-num">#11</span>
+                <span class="bid-source" style="background:#00897b">中国政府采购网</span>
+                <span class="bid-type">单一来源</span>
+                
+                <span class="match-badge" style="background:#f39c12">中</span>
+            </div>
+            <h3 class="bid-title">
+                <a href="https://www.ccgp.gov.cn/cggg/dfgg/dylygg/202609/t20260914_27319053.htm" target="_blank">上海市公安局奉贤分局(本部)奉贤区公共安全视频监控建设联网应用项目（视频监控点位服务）单...</a>
+            </h3>
+            <div class="bid-meta">
+                <div class="meta-row">
+                    <span class="meta-label">采购人</span>
+                    <span class="meta-value">上海市公安局奉贤分局(本部)</span>
+                </div>
+                <div class="meta-row">
+                    <span class="meta-label">预算金额</span>
+                    <span class="meta-value budget">5246.32万元</span>
+                </div>
+                <div class="meta-row">
+                    <span class="meta-label">发布日期</span>
+                    <span class="meta-value">2026-09-14 09:37</span>
+                </div>
+                <div class="meta-row">
+                    <span class="meta-label">地区</span>
+                    <span class="meta-value">上海</span>
+                </div>
+            </div>
+            <div class="bid-detail">视频监控点位服务</div>
+            
+            <div class="bid-keywords">
+                <span class="kw-label">命中关键词(2):</span>
+                <span class="kw-tag">监控</span> <span class="kw-tag">视频监控</span>
+            </div>
+            <div class="bid-actions">
+                <a href="https://www.ccgp.gov.cn/cggg/dfgg/dylygg/202609/t20260914_27319053.htm" target="_blank" class="btn-view">查看公告原文</a>
+            </div>
+        </div>
+        <div class="bid-card">
+            <div class="bid-header">
+                <span class="bid-num">#12</span>
+                <span class="bid-source" style="background:#00897b">中国政府采购网</span>
+                <span class="bid-type">中央公开招标</span>
+                
+                <span class="match-badge" style="background:#f39c12">中</span>
+            </div>
+            <h3 class="bid-title">
+                <a href="https://www.ccgp.gov.cn/cggg/zygg/gkzb/202609/t20260915_27326324.htm" target="_blank">中华人民共和国上海海关百炼大模型管理平台升级及运维服务项目公开招标公告</a>
+            </h3>
+            <div class="bid-meta">
+                <div class="meta-row">
+                    <span class="meta-label">采购人</span>
+                    <span class="meta-value">中华人民共和国上海海关</span>
+                </div>
+                <div class="meta-row">
+                    <span class="meta-label">预算金额</span>
+                    <span class="meta-value budget">110.00万元</span>
+                </div>
+                <div class="meta-row">
+                    <span class="meta-label">发布日期</span>
+                    <span class="meta-value">2026-09-15 10:40</span>
+                </div>
+                <div class="meta-row">
+                    <span class="meta-label">地区</span>
+                    <span class="meta-value">上海</span>
+                </div>
+            </div>
+            <div class="bid-detail">本项目是在海关总署已经建成的百炼大模型管理平台基础上，复用海关总署软件授权，在上海海关本地部署百炼大模型管理平台。为支撑百炼大模型管理平台在上海海关的本地化部署与稳定运行，本项目在总署已建成的大模型管理平台及智能算力平台基础上，于上海海关侧采购本地部署所需的AI网关及配套中间件软件各1套，包含AI网关、智能数据总线、AI统一存储底座、AI智能知识数据库、检索分析服务、统一可观测监控平台等六类核心组件；同步采购1人/年的驻场运维服务，覆盖平台日常巡检、故障处置、版本升级配合、异构算力纳管实施及使用培训等工作。（具体内容详见招标文件第三部分 服务需求）</div>
+            
+            <div class="bid-keywords">
+                <span class="kw-label">命中关键词(2):</span>
+                <span class="kw-tag">算力</span> <span class="kw-tag">监控</span>
+            </div>
+            <div class="bid-actions">
+                <a href="https://www.ccgp.gov.cn/cggg/zygg/gkzb/202609/t20260915_27326324.htm" target="_blank" class="btn-view">查看公告原文</a>
+            </div>
+        </div>
+        <div class="bid-card">
+            <div class="bid-header">
+                <span class="bid-num">#13</span>
+                <span class="bid-source" style="background:#1565c0">上海政府采购网</span>
+                <span class="bid-type">竞争性磋商公告</span>
+                
+                <span class="match-badge" style="background:#f39c12">中</span>
+            </div>
+            <h3 class="bid-title">
+                <a href="https://www.zfcg.sh.gov.cn/site/detail?parentId=137027&amp;articleId=hLzgXyTYI4YrzuVxRj7/ig==" target="_blank">2026年度半淞园路街道视频监控服务项目的竞争性磋商公告</a>
+            </h3>
+            <div class="bid-meta">
+                <div class="meta-row">
+                    <span class="meta-label">采购人</span>
+                    <span class="meta-value">上海市黄浦区人民政府半淞园路街道办事处</span>
+                </div>
+                <div class="meta-row">
+                    <span class="meta-label">预算金额</span>
+                    <span class="meta-value budget">261.36万元</span>
+                </div>
+                <div class="meta-row">
+                    <span class="meta-label">发布日期</span>
+                    <span class="meta-value">2026-09-14 15:00</span>
+                </div>
+                <div class="meta-row">
+                    <span class="meta-label">地区</span>
+                    <span class="meta-value">黄浦区</span>
+                </div>
+            </div>
+            <div class="bid-detail">采购方式: 竞争性磋商</div>
+            
+            <div class="bid-keywords">
+                <span class="kw-label">命中关键词(2):</span>
+                <span class="kw-tag">监控</span> <span class="kw-tag">视频监控</span>
+            </div>
+            <div class="bid-actions">
+                <a href="https://www.zfcg.sh.gov.cn/site/detail?parentId=137027&amp;articleId=hLzgXyTYI4YrzuVxRj7/ig==" target="_blank" class="btn-view">查看公告原文</a>
+            </div>
+        </div>
+        <div class="bid-card">
+            <div class="bid-header">
+                <span class="bid-num">#14</span>
+                <span class="bid-source" style="background:#1565c0">上海政府采购网</span>
+                <span class="bid-type">竞争性磋商公告</span>
+                
+                <span class="match-badge" style="background:#f39c12">中</span>
+            </div>
+            <h3 class="bid-title">
+                <a href="https://www.zfcg.sh.gov.cn/site/detail?parentId=137027&amp;articleId=uHr7zpK5IvddlyeI9wD40A==" target="_blank">泖港镇专职消防队第三方服务项目的竞争性磋商公告</a>
+            </h3>
+            <div class="bid-meta">
+                <div class="meta-row">
+                    <span class="meta-label">采购人</span>
+                    <span class="meta-value">上海市松江区泖港镇城市运行管理中心</span>
+                </div>
+                <div class="meta-row">
+                    <span class="meta-label">预算金额</span>
+                    <span class="meta-value budget">151.25万元</span>
+                </div>
+                <div class="meta-row">
+                    <span class="meta-label">发布日期</span>
+                    <span class="meta-value">2026-09-14 07:00</span>
+                </div>
+                <div class="meta-row">
+                    <span class="meta-label">地区</span>
+                    <span class="meta-value">松江区</span>
+                </div>
+            </div>
+            <div class="bid-detail">采购方式: 竞争性磋商</div>
+            
+            <div class="bid-keywords">
+                <span class="kw-label">命中关键词(2):</span>
+                <span class="kw-tag">消防</span> <span class="kw-tag">城市运行</span>
+            </div>
+            <div class="bid-actions">
+                <a href="https://www.zfcg.sh.gov.cn/site/detail?parentId=137027&amp;articleId=uHr7zpK5IvddlyeI9wD40A==" target="_blank" class="btn-view">查看公告原文</a>
+            </div>
+        </div>
+        <div class="bid-card">
+            <div class="bid-header">
+                <span class="bid-num">#15</span>
+                <span class="bid-source" style="background:#1565c0">上海政府采购网</span>
+                <span class="bid-type">单一来源采购公示</span>
+                
+                <span class="match-badge" style="background:#f39c12">中</span>
+            </div>
+            <h3 class="bid-title">
+                <a href="https://www.zfcg.sh.gov.cn/site/detail?parentId=137027&amp;articleId=kqSUMrGwz1NJIv/uD28VvQ==" target="_blank">上海市公安局奉贤分局(本部)奉贤区公共安全视频监控建设联网应用项目（视频监控点位服务）单一来源公示</a>
+            </h3>
+            <div class="bid-meta">
+                <div class="meta-row">
+                    <span class="meta-label">采购人</span>
+                    <span class="meta-value">上海市公安局奉贤分局(本部)</span>
+                </div>
+                <div class="meta-row">
+                    <span class="meta-label">预算金额</span>
+                    <span class="meta-value budget">5246.32万元</span>
+                </div>
+                <div class="meta-row">
+                    <span class="meta-label">发布日期</span>
+                    <span class="meta-value">2026-09-14 01:37</span>
+                </div>
+                <div class="meta-row">
+                    <span class="meta-label">地区</span>
+                    <span class="meta-value">奉贤区</span>
+                </div>
+            </div>
+            <div class="bid-detail">采购方式: 单一来源</div>
+            
+            <div class="bid-keywords">
+                <span class="kw-label">命中关键词(2):</span>
+                <span class="kw-tag">监控</span> <span class="kw-tag">视频监控</span>
+            </div>
+            <div class="bid-actions">
+                <a href="https://www.zfcg.sh.gov.cn/site/detail?parentId=137027&amp;articleId=kqSUMrGwz1NJIv/uD28VvQ==" target="_blank" class="btn-view">查看公告原文</a>
+            </div>
+        </div>
+        <div class="bid-card">
+            <div class="bid-header">
+                <span class="bid-num">#16</span>
+                <span class="bid-source" style="background:#1565c0">上海政府采购网</span>
+                <span class="bid-type">采购意向公开</span>
+                
+                <span class="match-badge" style="background:#f39c12">中</span>
+            </div>
+            <h3 class="bid-title">
+                <a href="https://www.zfcg.sh.gov.cn/site/detail?parentId=137027&amp;articleId=+C5nJlEslYuRaKBDYu4aXw==" target="_blank">上海市大数据中心2026年10月政府采购意向</a>
+            </h3>
+            <div class="bid-meta">
+                <div class="meta-row">
+                    <span class="meta-label">采购人</span>
+                    <span class="meta-value">上海市大数据中心</span>
+                </div>
+                <div class="meta-row">
+                    <span class="meta-label">预算金额</span>
+                    <span class="meta-value budget">详见公告</span>
+                </div>
+                <div class="meta-row">
+                    <span class="meta-label">发布日期</span>
+                    <span class="meta-value">2026-09-14 06:23</span>
+                </div>
+                <div class="meta-row">
+                    <span class="meta-label">地区</span>
+                    <span class="meta-value">上海市本级</span>
+                </div>
+            </div>
+            
+            
+            <div class="bid-keywords">
+                <span class="kw-label">命中关键词(2):</span>
+                <span class="kw-tag">大数据</span> <span class="kw-tag">数据中心</span>
+            </div>
+            <div class="bid-actions">
+                <a href="https://www.zfcg.sh.gov.cn/site/detail?parentId=137027&amp;articleId=+C5nJlEslYuRaKBDYu4aXw==" target="_blank" class="btn-view">查看公告原文</a>
+            </div>
+        </div>
+        <div class="bid-card">
+            <div class="bid-header">
+                <span class="bid-num">#17</span>
+                <span class="bid-source" style="background:#00897b">中国政府采购网</span>
+                <span class="bid-type">中央公开招标</span>
+                
+                <span class="match-badge" style="background:#f39c12">中</span>
+            </div>
+            <h3 class="bid-title">
+                <a href="https://www.ccgp.gov.cn/cggg/zygg/gkzb/202609/t20260915_27326488.htm" target="_blank">复旦大学国家基础研究创新提升工程建设项目（化学）招标代理服务公开招标公告</a>
+            </h3>
+            <div class="bid-meta">
+                <div class="meta-row">
+                    <span class="meta-label">采购人</span>
+                    <span class="meta-value">复旦大学</span>
+                </div>
+                <div class="meta-row">
+                    <span class="meta-label">预算金额</span>
+                    <span class="meta-value budget">148.00万元</span>
+                </div>
+                <div class="meta-row">
+                    <span class="meta-label">发布日期</span>
+                    <span class="meta-value">2026-09-15 10:58</span>
+                </div>
+                <div class="meta-row">
+                    <span class="meta-label">地区</span>
+                    <span class="meta-value">上海</span>
+                </div>
+            </div>
+            <div class="bid-detail">采购对象名称 复旦大学国家基础研究创新提升工程建设项目（化学）招标代理服务 项目简要描述 复旦大学国家基础研究创新提升工程建设项目（化学）选址位于复旦大学江湾校区，基地东临淞沪路，西靠一号交叉学科楼，南侧为中心湖绿地，北邻环境科学楼。总建筑面积23949平方米，其中地上建筑面积18933平方米，地下建筑面积5016平方米，建筑高度约24米，地上5层，地下1层，主要建设内容为科研用房、人防停车库及设备用房。通过本次招标，择优选定1家供应商为招标人提供招标代理服务。 具体详见招标文件第三章“采购需求”。 采购预算金额 （人民币） 148万元 最高限价 （人民币） 148万元</div>
+            
+            <div class="bid-keywords">
+                <span class="kw-label">命中关键词(1):</span>
+                <span class="kw-tag">人防</span>
+            </div>
+            <div class="bid-actions">
+                <a href="https://www.ccgp.gov.cn/cggg/zygg/gkzb/202609/t20260915_27326488.htm" target="_blank" class="btn-view">查看公告原文</a>
+            </div>
+        </div>
+        <div class="bid-card">
+            <div class="bid-header">
+                <span class="bid-num">#18</span>
+                <span class="bid-source" style="background:#00897b">中国政府采购网</span>
+                <span class="bid-type">中央公开招标</span>
+                
+                <span class="match-badge" style="background:#f39c12">中</span>
+            </div>
+            <h3 class="bid-title">
+                <a href="https://www.ccgp.gov.cn/cggg/zygg/gkzb/202609/t20260914_27324867.htm" target="_blank">东华大学松江校区新建学生公寓东楼公开招标公告</a>
+            </h3>
+            <div class="bid-meta">
+                <div class="meta-row">
+                    <span class="meta-label">采购人</span>
+                    <span class="meta-value">东华大学</span>
+                </div>
+                <div class="meta-row">
+                    <span class="meta-label">预算金额</span>
+                    <span class="meta-value budget">37012.09万元</span>
+                </div>
+                <div class="meta-row">
+                    <span class="meta-label">发布日期</span>
+                    <span class="meta-value">2026-09-14 19:39</span>
+                </div>
+                <div class="meta-row">
+                    <span class="meta-label">地区</span>
+                    <span class="meta-value">上海</span>
+                </div>
+            </div>
+            <div class="bid-detail">主要建设内容包括：学生宿舍、后勤及附属用房、设备用房、人防地下车库等。本项目总建筑面积53020平方米，地上建筑面积41685平方米，地下11335平方米。本项目高度为59.7米。</div>
+            
+            <div class="bid-keywords">
+                <span class="kw-label">命中关键词(1):</span>
+                <span class="kw-tag">人防</span>
+            </div>
+            <div class="bid-actions">
+                <a href="https://www.ccgp.gov.cn/cggg/zygg/gkzb/202609/t20260914_27324867.htm" target="_blank" class="btn-view">查看公告原文</a>
+            </div>
+        </div>
+        <div class="bid-card">
+            <div class="bid-header">
+                <span class="bid-num">#19</span>
+                <span class="bid-source" style="background:#00897b">中国政府采购网</span>
+                <span class="bid-type">中央公开招标</span>
+                
+                <span class="match-badge" style="background:#f39c12">中</span>
+            </div>
+            <h3 class="bid-title">
+                <a href="https://www.ccgp.gov.cn/cggg/zygg/gkzb/202609/t20260914_27324865.htm" target="_blank">东华大学松江校区新建学生公寓东楼施工监理公开招标公告</a>
+            </h3>
+            <div class="bid-meta">
+                <div class="meta-row">
+                    <span class="meta-label">采购人</span>
+                    <span class="meta-value">东华大学</span>
+                </div>
+                <div class="meta-row">
+                    <span class="meta-label">预算金额</span>
+                    <span class="meta-value budget">360.00万元</span>
+                </div>
+                <div class="meta-row">
+                    <span class="meta-label">发布日期</span>
+                    <span class="meta-value">2026-09-14 19:39</span>
+                </div>
+                <div class="meta-row">
+                    <span class="meta-label">地区</span>
+                    <span class="meta-value">上海</span>
+                </div>
+            </div>
+            <div class="bid-detail">项目主要建设内容为学生宿舍、后勤及附属用房、设备用房、人防地下车库等。项目位于东华大学松江校区，总建筑面积53020平方米，地上建筑面积41685平方米，地下建筑面积11335平方米。</div>
+            
+            <div class="bid-keywords">
+                <span class="kw-label">命中关键词(1):</span>
+                <span class="kw-tag">人防</span>
+            </div>
+            <div class="bid-actions">
+                <a href="https://www.ccgp.gov.cn/cggg/zygg/gkzb/202609/t20260914_27324865.htm" target="_blank" class="btn-view">查看公告原文</a>
+            </div>
+        </div>
+        <div class="bid-card">
+            <div class="bid-header">
+                <span class="bid-num">#20</span>
+                <span class="bid-source" style="background:#00897b">中国政府采购网</span>
+                <span class="bid-type">中央公开招标</span>
+                
+                <span class="match-badge" style="background:#f39c12">中</span>
+            </div>
+            <h3 class="bid-title">
+                <a href="https://www.ccgp.gov.cn/cggg/zygg/gkzb/202609/t20260914_27322774.htm" target="_blank">复旦大学脉冲激光溅射沉积设备采购公开招标公告</a>
+            </h3>
+            <div class="bid-meta">
+                <div class="meta-row">
+                    <span class="meta-label">采购人</span>
+                    <span class="meta-value">复旦大学</span>
+                </div>
+                <div class="meta-row">
+                    <span class="meta-label">预算金额</span>
+                    <span class="meta-value budget">345.00万元</span>
+                </div>
+                <div class="meta-row">
+                    <span class="meta-label">发布日期</span>
+                    <span class="meta-value">2026-09-14 16:46</span>
+                </div>
+                <div class="meta-row">
+                    <span class="meta-label">地区</span>
+                    <span class="meta-value">上海</span>
+                </div>
+            </div>
+            <div class="bid-detail">1、项目编号：HW2026081401（2502052054）2、项目名称：复旦大学脉冲激光溅射沉积设备采购3、采购需求： 包件号 1 名称 脉冲激光溅射沉积设备 数量 1套 用途和主要规格参数 本项目采购一套高性能脉冲激光溅射沉积（Pulsed Laser Deposition, PLD）系统，用于提供高质量单晶/多晶氧化物薄膜的原位制备平台，支撑从材料探索到器件原型验证的全链条研究。要求设备具备组分保真、适合氧化物与原子级外延与原位监控。 采购预算金额 （人民币） 345万元 最高限价 （人民币） 345万元</div>
+            
+            <div class="bid-keywords">
+                <span class="kw-label">命中关键词(1):</span>
+                <span class="kw-tag">监控</span>
+            </div>
+            <div class="bid-actions">
+                <a href="https://www.ccgp.gov.cn/cggg/zygg/gkzb/202609/t20260914_27322774.htm" target="_blank" class="btn-view">查看公告原文</a>
+            </div>
+        </div>
+        <div class="bid-card">
+            <div class="bid-header">
+                <span class="bid-num">#21</span>
+                <span class="bid-source" style="background:#1565c0">上海政府采购网</span>
+                <span class="bid-type">公开招标公告</span>
+                
+                <span class="match-badge" style="background:#f39c12">中</span>
+            </div>
+            <h3 class="bid-title">
+                <a href="https://www.zfcg.sh.gov.cn/site/detail?parentId=137027&amp;articleId=lzUUNgkDlaskQdKM8i99mQ==" target="_blank">新一代网络综合实训室建设项目的公开招标公告</a>
+            </h3>
+            <div class="bid-meta">
+                <div class="meta-row">
+                    <span class="meta-label">采购人</span>
+                    <span class="meta-value">上海市经济管理学校</span>
+                </div>
+                <div class="meta-row">
+                    <span class="meta-label">预算金额</span>
+                    <span class="meta-value budget">100.00万元</span>
+                </div>
+                <div class="meta-row">
+                    <span class="meta-label">发布日期</span>
+                    <span class="meta-value">2026-09-14 16:00</span>
+                </div>
+                <div class="meta-row">
+                    <span class="meta-label">地区</span>
+                    <span class="meta-value">上海市本级</span>
+                </div>
+            </div>
+            <div class="bid-detail">采购方式: 公开招标</div>
+            
+            <div class="bid-keywords">
+                <span class="kw-label">命中关键词(1):</span>
+                <span class="kw-tag">网络</span>
+            </div>
+            <div class="bid-actions">
+                <a href="https://www.zfcg.sh.gov.cn/site/detail?parentId=137027&amp;articleId=lzUUNgkDlaskQdKM8i99mQ==" target="_blank" class="btn-view">查看公告原文</a>
+            </div>
+        </div>
+        <div class="bid-card">
+            <div class="bid-header">
+                <span class="bid-num">#22</span>
+                <span class="bid-source" style="background:#1565c0">上海政府采购网</span>
+                <span class="bid-type">公开招标公告</span>
+                
+                <span class="match-badge" style="background:#f39c12">中</span>
+            </div>
+            <h3 class="bid-title">
+                <a href="https://www.zfcg.sh.gov.cn/site/detail?parentId=137027&amp;articleId=fvTb3l4tFu3QEcZVQmSS0g==" target="_blank">庙镇社区微型消防站运维项目的公开招标公告</a>
+            </h3>
+            <div class="bid-meta">
+                <div class="meta-row">
+                    <span class="meta-label">采购人</span>
+                    <span class="meta-value">上海市崇明区庙镇人民政府</span>
+                </div>
+                <div class="meta-row">
+                    <span class="meta-label">预算金额</span>
+                    <span class="meta-value budget">119.00万元</span>
+                </div>
+                <div class="meta-row">
+                    <span class="meta-label">发布日期</span>
+                    <span class="meta-value">2026-09-14 15:00</span>
+                </div>
+                <div class="meta-row">
+                    <span class="meta-label">地区</span>
+                    <span class="meta-value">崇明区</span>
+                </div>
+            </div>
+            <div class="bid-detail">采购方式: 公开招标</div>
+            
+            <div class="bid-keywords">
+                <span class="kw-label">命中关键词(1):</span>
+                <span class="kw-tag">消防</span>
+            </div>
+            <div class="bid-actions">
+                <a href="https://www.zfcg.sh.gov.cn/site/detail?parentId=137027&amp;articleId=fvTb3l4tFu3QEcZVQmSS0g==" target="_blank" class="btn-view">查看公告原文</a>
+            </div>
+        </div>
+        <div class="bid-card">
+            <div class="bid-header">
+                <span class="bid-num">#23</span>
+                <span class="bid-source" style="background:#1565c0">上海政府采购网</span>
+                <span class="bid-type">公开招标公告</span>
+                
+                <span class="match-badge" style="background:#f39c12">中</span>
+            </div>
+            <h3 class="bid-title">
+                <a href="https://www.zfcg.sh.gov.cn/site/detail?parentId=137027&amp;articleId=vRNg9UmDO6KJ9eHXCsdL6g==" target="_blank">2026年度黄浦区区校一体化数智练习信息化服务项目的公开招标公告</a>
+            </h3>
+            <div class="bid-meta">
+                <div class="meta-row">
+                    <span class="meta-label">采购人</span>
+                    <span class="meta-value">上海市黄浦区教育信息中心</span>
+                </div>
+                <div class="meta-row">
+                    <span class="meta-label">预算金额</span>
+                    <span class="meta-value budget">304.93万元</span>
+                </div>
+                <div class="meta-row">
+                    <span class="meta-label">发布日期</span>
+                    <span class="meta-value">2026-09-14 12:00</span>
+                </div>
+                <div class="meta-row">
+                    <span class="meta-label">地区</span>
+                    <span class="meta-value">黄浦区</span>
+                </div>
+            </div>
+            <div class="bid-detail">采购方式: 公开招标</div>
+            
+            <div class="bid-keywords">
+                <span class="kw-label">命中关键词(1):</span>
+                <span class="kw-tag">信息化</span>
+            </div>
+            <div class="bid-actions">
+                <a href="https://www.zfcg.sh.gov.cn/site/detail?parentId=137027&amp;articleId=vRNg9UmDO6KJ9eHXCsdL6g==" target="_blank" class="btn-view">查看公告原文</a>
+            </div>
+        </div>
+        <div class="bid-card">
+            <div class="bid-header">
+                <span class="bid-num">#24</span>
+                <span class="bid-source" style="background:#1565c0">上海政府采购网</span>
+                <span class="bid-type">公开招标公告</span>
+                
+                <span class="match-badge" style="background:#f39c12">中</span>
+            </div>
+            <h3 class="bid-title">
+                <a href="https://www.zfcg.sh.gov.cn/site/detail?parentId=137027&amp;articleId=zrwF+46ZmAOwRtsfFSbTGw==" target="_blank">闵行区教育局云计算服务（2026运维）项目的公开招标公告</a>
+            </h3>
+            <div class="bid-meta">
+                <div class="meta-row">
+                    <span class="meta-label">采购人</span>
+                    <span class="meta-value">闵行区教育局</span>
+                </div>
+                <div class="meta-row">
+                    <span class="meta-label">预算金额</span>
+                    <span class="meta-value budget">359.99万元</span>
+                </div>
+                <div class="meta-row">
+                    <span class="meta-label">发布日期</span>
+                    <span class="meta-value">2026-09-14 09:00</span>
+                </div>
+                <div class="meta-row">
+                    <span class="meta-label">地区</span>
+                    <span class="meta-value">闵行区</span>
+                </div>
+            </div>
+            <div class="bid-detail">采购方式: 公开招标</div>
+            
+            <div class="bid-keywords">
+                <span class="kw-label">命中关键词(1):</span>
+                <span class="kw-tag">云计算</span>
+            </div>
+            <div class="bid-actions">
+                <a href="https://www.zfcg.sh.gov.cn/site/detail?parentId=137027&amp;articleId=zrwF+46ZmAOwRtsfFSbTGw==" target="_blank" class="btn-view">查看公告原文</a>
+            </div>
+        </div>
+        <div class="bid-card">
+            <div class="bid-header">
+                <span class="bid-num">#25</span>
+                <span class="bid-source" style="background:#1565c0">上海政府采购网</span>
+                <span class="bid-type">公开招标公告</span>
+                
+                <span class="match-badge" style="background:#f39c12">中</span>
+            </div>
+            <h3 class="bid-title">
+                <a href="https://www.zfcg.sh.gov.cn/site/detail?parentId=137027&amp;articleId=OaAqqhnJ8pp5DyD1yyrn/Q==" target="_blank">上海市徐汇区政府采购中心--徐汇区教育局上海小学等学校配套弱电系统的公开招标公告</a>
+            </h3>
+            <div class="bid-meta">
+                <div class="meta-row">
+                    <span class="meta-label">采购人</span>
+                    <span class="meta-value">上海市徐汇区教育局</span>
+                </div>
+                <div class="meta-row">
+                    <span class="meta-label">预算金额</span>
+                    <span class="meta-value budget">632.00万元</span>
+                </div>
+                <div class="meta-row">
+                    <span class="meta-label">发布日期</span>
+                    <span class="meta-value">2026-09-14 01:30</span>
+                </div>
+                <div class="meta-row">
+                    <span class="meta-label">地区</span>
+                    <span class="meta-value">徐汇区</span>
+                </div>
+            </div>
+            <div class="bid-detail">采购方式: 公开招标</div>
+            
+            <div class="bid-keywords">
+                <span class="kw-label">命中关键词(1):</span>
+                <span class="kw-tag">弱电</span>
+            </div>
+            <div class="bid-actions">
+                <a href="https://www.zfcg.sh.gov.cn/site/detail?parentId=137027&amp;articleId=OaAqqhnJ8pp5DyD1yyrn/Q==" target="_blank" class="btn-view">查看公告原文</a>
+            </div>
+        </div>
+        <div class="bid-card">
+            <div class="bid-header">
+                <span class="bid-num">#26</span>
+                <span class="bid-source" style="background:#1565c0">上海政府采购网</span>
+                <span class="bid-type">公开招标公告</span>
+                
+                <span class="match-badge" style="background:#f39c12">中</span>
+            </div>
+            <h3 class="bid-title">
+                <a href="https://www.zfcg.sh.gov.cn/site/detail?parentId=137027&amp;articleId=HnaUtyxz9fZpz1uA+bzfAQ==" target="_blank">上海市普陀区中心医院2026年全院信息化运维服务的公开招标公告</a>
+            </h3>
+            <div class="bid-meta">
+                <div class="meta-row">
+                    <span class="meta-label">采购人</span>
+                    <span class="meta-value">上海市普陀区中心医院</span>
+                </div>
+                <div class="meta-row">
+                    <span class="meta-label">预算金额</span>
+                    <span class="meta-value budget">430.00万元</span>
+                </div>
+                <div class="meta-row">
+                    <span class="meta-label">发布日期</span>
+                    <span class="meta-value">2026-09-13 16:00</span>
+                </div>
+                <div class="meta-row">
+                    <span class="meta-label">地区</span>
+                    <span class="meta-value">普陀区</span>
+                </div>
+            </div>
+            <div class="bid-detail">采购方式: 公开招标</div>
+            
+            <div class="bid-keywords">
+                <span class="kw-label">命中关键词(1):</span>
+                <span class="kw-tag">信息化</span>
+            </div>
+            <div class="bid-actions">
+                <a href="https://www.zfcg.sh.gov.cn/site/detail?parentId=137027&amp;articleId=HnaUtyxz9fZpz1uA+bzfAQ==" target="_blank" class="btn-view">查看公告原文</a>
+            </div>
+        </div>
+        <div class="bid-card">
+            <div class="bid-header">
+                <span class="bid-num">#27</span>
+                <span class="bid-source" style="background:#1565c0">上海政府采购网</span>
+                <span class="bid-type">公开招标公告</span>
+                
+                <span class="match-badge" style="background:#f39c12">中</span>
+            </div>
+            <h3 class="bid-title">
+                <a href="https://www.zfcg.sh.gov.cn/site/detail?parentId=137027&amp;articleId=ENonk+Nh94D7P1V9m4Q28A==" target="_blank">南翔派出所综合指挥室屏显系统升级改造项目的公开招标公告</a>
+            </h3>
+            <div class="bid-meta">
+                <div class="meta-row">
+                    <span class="meta-label">采购人</span>
+                    <span class="meta-value">上海市嘉定区南翔镇人民政府</span>
+                </div>
+                <div class="meta-row">
+                    <span class="meta-label">预算金额</span>
+                    <span class="meta-value budget">180.72万元</span>
+                </div>
+                <div class="meta-row">
+                    <span class="meta-label">发布日期</span>
+                    <span class="meta-value">2026-09-13 16:00</span>
+                </div>
+                <div class="meta-row">
+                    <span class="meta-label">地区</span>
+                    <span class="meta-value">嘉定区</span>
+                </div>
+            </div>
+            <div class="bid-detail">采购方式: 公开招标</div>
+            
+            <div class="bid-keywords">
+                <span class="kw-label">命中关键词(1):</span>
+                <span class="kw-tag">指挥</span>
+            </div>
+            <div class="bid-actions">
+                <a href="https://www.zfcg.sh.gov.cn/site/detail?parentId=137027&amp;articleId=ENonk+Nh94D7P1V9m4Q28A==" target="_blank" class="btn-view">查看公告原文</a>
+            </div>
+        </div>
+        <div class="bid-card">
+            <div class="bid-header">
+                <span class="bid-num">#28</span>
+                <span class="bid-source" style="background:#1565c0">上海政府采购网</span>
+                <span class="bid-type">竞争性磋商公告</span>
+                
+                <span class="match-badge" style="background:#f39c12">中</span>
+            </div>
+            <h3 class="bid-title">
+                <a href="https://www.zfcg.sh.gov.cn/site/detail?parentId=137027&amp;articleId=8RBIr3Y+MSkwsTNYwyA8Fw==" target="_blank">档案整理、寄存及数字化扫描的竞争性磋商公告</a>
+            </h3>
+            <div class="bid-meta">
+                <div class="meta-row">
+                    <span class="meta-label">采购人</span>
+                    <span class="meta-value">上海市松江区自然资源确权登记事务中心</span>
+                </div>
+                <div class="meta-row">
+                    <span class="meta-label">预算金额</span>
+                    <span class="meta-value budget">307.70万元</span>
+                </div>
+                <div class="meta-row">
+                    <span class="meta-label">发布日期</span>
+                    <span class="meta-value">2026-09-14 16:00</span>
+                </div>
+                <div class="meta-row">
+                    <span class="meta-label">地区</span>
+                    <span class="meta-value">松江区</span>
+                </div>
+            </div>
+            <div class="bid-detail">采购方式: 竞争性磋商</div>
+            
+            <div class="bid-keywords">
+                <span class="kw-label">命中关键词(1):</span>
+                <span class="kw-tag">数字化</span>
+            </div>
+            <div class="bid-actions">
+                <a href="https://www.zfcg.sh.gov.cn/site/detail?parentId=137027&amp;articleId=8RBIr3Y+MSkwsTNYwyA8Fw==" target="_blank" class="btn-view">查看公告原文</a>
+            </div>
+        </div>
+    </div>
+    <div class="footer">
+        <p>本报告由东方有线投标监控程序 v2.0 自动生成 | 临港新片区分公司专用</p>
+        <p>数据来源: 中国政府采购网(ccgp.gov.cn) + 上海市政府采购网(zfcg.sh.gov.cn) | 仅供参考，具体投标信息以官方公告为准</p>
+    </div>
+</body>
+</html>
